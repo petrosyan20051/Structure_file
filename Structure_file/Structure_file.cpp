@@ -11,7 +11,7 @@ using namespace std;
 #define PATH2 "data/output.txt"
 #define N 100
 
-int main_t()
+int main()
 {
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
@@ -26,15 +26,14 @@ int main_t()
 	}
 
 	unsigned short int i = 0, count = 0;
-	cout << "Начинаем запись информации об изделиях" << endl;
+	cout << "Начинаем запись информации об изделиях (введите '*' для завершения ввода)" << endl;
 	for (count; count < N; count++)
 	{
-		unsigned short int t1; // выделяем память для локальных переменных ввода из консоли и дальнейшего переноса в текстовый файл для дальнейшего считывания
-		char t2[25];
+		unsigned long int t1; // выделяем память для локальных переменных ввода из консоли и дальнейшего переноса в текстовый файл для дальнейшего считывания
+		char t2[50];
 
 		if (i == 5)
 		{
-			file << '\n';
 			i = 0;
 			count++;
 		}
@@ -43,29 +42,32 @@ int main_t()
 		case 0:
 			cout << "Введите Артикул: ";
 			cin >> t2;
-			file << t2;
+			file << t2 << '\n';
 			break;
 		case 1:
 			cout << "Введите Наименование: ";
 			cin >> t2;
-			file << t2;
+			file << t2 << '\n';
 			break;
 		case 2:
 			cout << "Введите Стоимость: ";
 			cin >> t1;
-			file << t1;
+			file << t1 << '\n';
 			break;
 		case 3:
 			cout << "Введите Количество: ";
 			cin >> t1;
-			file << t1;
+			file << t1 << '\n';
 			break;
 		case 4:
 			cout << "Введите Дату: ";
 			cin >> t2;
-			file << t2;
+			file << t2 << '\n';
 			break;
 		}
+		if (t2[0] - '*' == 0)
+			break;
+		i++;
 
 	}
 
@@ -89,12 +91,12 @@ int main_t()
 		cout << "Файл для записи результатов не открыт!" << endl;
 		return 1;
 	}
-	out << setw(25) << "Артикул" << '\t|\t' << setw(25) << "Наименование" << '\t|\t' << setw(25) << "Стоимость" << '\t|\t' << setw(25) << "Количество" << '\t|\t' << setw(26) << "Дата производства";
+	out << setw(20) << "Артикул" << '\t' << '|' << '\t' << setw(20) << "Наименование" << '\t' << '|' << '\t' << setw(20) << "Стоимость" << '\t' << '|' << '\t' << setw(20) << "Количество" << '\t' << '|' << '\t' << setw(20) << "Дата производства" << endl;
 
 	struct data_base
 	{
-		char art[25];
-		char name[20];
+		char art[15];
+		char name[50];
 		unsigned long int cost;
 		unsigned long int count;
 		char date[8];
@@ -106,14 +108,16 @@ int main_t()
 	in >> pr.art >> pr.name >> pr.cost >> pr.count >> pr.date; // считываем первый товар и берём начальные значения цены и количества, с помощью которых будет сравнивать другие товары
 	mnc = pr.cost;
 	mxk = pr.count;
-	out << setw(25) << pr.art << '\t|\t' << setw(25) << pr.name << '\t|\t' << setw(25) << pr.cost << '\t|\t' << setw(25) << pr.count << '\t|\t' << setw(25) << pr.date;
-
-	while (in.eof())
+	out << setw(20) << pr.art << '\t' << '|' << '\t' << setw(20) << pr.name << '\t' << '|' << '\t' << setw(20) << pr.cost << '\t' << '|' << '\t' << setw(20) << pr.count << '\t' << '|' << '\t' << setw(20) << pr.date << endl;
+	while (in)
 	{
 		in >> pr.art >> pr.name >> pr.cost >> pr.count >> pr.date;
 		if (pr.cost < mnc && pr.count > mxk)
-			out << setw(25) << pr.art << '\t|\t' << setw(25) << pr.name << '\t|\t' << setw(25) << pr.cost << '\t|\t' << setw(25) << pr.count << '\t|\t' << setw(25) << pr.date;
-
+		{
+			out << setw(20) << pr.art << '\t' << '|' << '\t' << setw(20) << pr.name << '\t' << '|' << '\t' << setw(20) << pr.cost << '\t' << '|' << '\t' << setw(20) << pr.count << '\t' << '|' << '\t' << setw(20) << pr.date << endl;
+			mnc = pr.cost;
+			mxk = pr.count;
+		}
 	}
 
 	cout << "Работа с файлом успешно завершена!";
